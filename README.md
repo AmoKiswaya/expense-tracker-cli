@@ -1,0 +1,1 @@
+An expense tracker application that manages one's finances. The application comes with features such as add, delete, and view expenses that can be performed on the terminal. The application also provides a summary of the expenses.  
