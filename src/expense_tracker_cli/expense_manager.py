@@ -1,6 +1,9 @@
 from expense_tracker_cli.expense import Expense
+import json
 
 class ExpenseManager:
+    __file_path = "expenses.json"
+
     def __init__(self):
         self._expenses = {}
         self.load_expenses()
@@ -39,8 +42,14 @@ class ExpenseManager:
     def delete_expense(self):
         pass
 
-    def save_expenses():
-        pass
+    def save_expenses(self):
+        data = {}
+
+        for expense_id, expense in self._expenses.items():
+            data[expense_id] = expense.to_dict()
+
+        with open(self.__file_path, "w") as file:
+            json.dump(data, file)
     
     def load_expenses():
         pass
