@@ -33,14 +33,37 @@ class ExpenseManager:
         
         return expense
 
-    def list_expenses(Self):
-        pass
+    def list_expenses(self):
+        load_expenses = self.load_expenses()
+        if not load_expenses():
+            return "Empty file: No expenses found to list."
+        expenses = self._expenses.values()
+        return list(expenses)
+        
 
     def expenses_summary(self):
-        pass
+        load_expenses = self.load_expenses()
+        if not load_expenses:
+            return "No expenses found."
+        total_amount = sum(expense['amount'] for expense in load_expenses['expenses'])
+        print(f"Total expenses: {total_amount}")
+        
 
-    def delete_expense(self):
-        pass
+    def delete_expense(self, id): 
+        try:
+            expense_id = int(id)
+
+        except ValueError:
+            return "Invalid input. Please enter an integer"
+        
+        if id not in self._expenses:
+            raise ValueError(f"Expense with id {expense_id} not found")
+
+        expense = self._expenses[expense_id]
+        del self._expenses[expense_id]
+        self.save_expenses()
+        return expense
+        
 
     def save_expenses(self):
         data = {}
@@ -61,6 +84,6 @@ class ExpenseManager:
                    self._expenses[int(expense_id)] = expense_obj 
 
         except FileNotFoundError:
-            self.__file_path = []
+            self._expenses = []
         except json.JSONDecodeError:
-            self.__file_path = []
+            self._expenses = []
