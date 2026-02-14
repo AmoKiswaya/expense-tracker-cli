@@ -39,7 +39,18 @@ class ExpenseManager:
             return "Empty file: No expenses found to list."
         expenses = self._expenses.values()
         return list(expenses)
-        
+
+
+    def update_expense(self, expense_id:int, description:str, amount:int):
+        expense = self._expenses.get(expense_id)
+
+        if not expense:
+            raise ValueError(f"Expense with id {expense_id} does not exist")
+
+        expense.update(description=description, amount=amount) 
+        self.save_expenses()
+
+        return expense 
 
     def expenses_summary(self):
         load_expenses = self.load_expenses()
