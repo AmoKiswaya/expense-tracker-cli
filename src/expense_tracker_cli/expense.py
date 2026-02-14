@@ -13,6 +13,15 @@ class Expense:
         self.amount = amount
         self.createdAt = f"{datetime.now():%d-%m-%YT%H:%M:%S}" 
 
+    @classmethod
+    def from_dict(cls, data: dict):
+        return cls (
+            expense_id=data["id"],
+            description=data.get("description", ""),
+            amount=data.get("amount"),
+            created_at = data.get("createdAt") 
+        )
+
     def to_dict(self):
         """
         Convert expense object to a dictionary for JSON storage.

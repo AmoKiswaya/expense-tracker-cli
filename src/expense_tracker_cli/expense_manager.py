@@ -51,5 +51,16 @@ class ExpenseManager:
         with open(self.__file_path, "w") as file:
             json.dump(data, file)
     
-    def load_expenses():
-        pass
+    def load_expenses(self):
+        """Load existing expenses from JSON file"""
+        try:
+            with open(ExpenseManager.__file_path, "r") as file: 
+                expenses_list = json.load(file)
+                for expense_id, expense_data in expenses_list.items():
+                   expense_obj = Expense.from_dict(expense_data)
+                   self._expenses[int(expense_id)] = expense_obj 
+
+        except FileNotFoundError:
+            self.__file_path = []
+        except json.JSONDecodeError:
+            self.__file_path = []
