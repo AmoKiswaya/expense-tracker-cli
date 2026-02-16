@@ -13,7 +13,7 @@ def main():
     add_parser.add_argument("--description", help="Expense description", required=True)
     add_parser.add_argument("--amount", help="Expense amount", required=True) 
 
-    list_expenses = subparsers.add_parser("list", help="List all expenses") 
+    subparsers.add_parser("list", help="List all expenses") 
 
     update_expenses = subparsers.add_parser("update", help="Update Expense")
     update_expenses.add_argument("--id", type=int, help="Expense's id", required=True)
@@ -29,13 +29,24 @@ def main():
     if args.command == "add":
         expense = manager.add_expense(amount=args.amount, description=args.description)
 
+        if isinstance(expense, str):
+            print(f"Error: {expense}") 
+        else:
+            print(f"Expense added successfully (ID: {expense.id})")
+
+
     elif args.command == "list":
         expenses = manager.list_expenses()
 
         if not expenses:
             print("No expenses found")
+            return
+        
+        print(f"{'ID':<5} {'Date':<22} {'Description':<20} {'Amount':>10}")
+        print("-" * 60)
+        for e in expenses:
+            print(f"{e.id:<5} {e.createdAt:<22} {e.description:<20} ${e.amount:>9.2f}")
 
-        print(expenses) 
 
     elif args.command == "update":
         try:
