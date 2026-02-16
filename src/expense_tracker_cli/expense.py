@@ -18,9 +18,10 @@ class Expense:
     def from_dict(cls, data: dict):
         return cls (
             expense_id=data["id"],
-            description=data.get("description", ""),
+            description=data.get("description"),
             amount=data.get("amount"),
-            created_at = data.get("createdAt") 
+            created_at = data.get("createdAt"), 
+            updated_At = data.get("updatedAt") 
         )
 
     def to_dict(self):

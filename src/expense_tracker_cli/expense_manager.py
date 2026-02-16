@@ -1,5 +1,7 @@
 from expense_tracker_cli.expense import Expense
 import json
+from datetime import datetime
+import calendar
 
 class ExpenseManager:
     __file_path = "expenses.json"
@@ -56,9 +58,20 @@ class ExpenseManager:
         load_expenses = self.load_expenses()
         if not load_expenses:
             return "No expenses found."
+        
         total_amount = sum(expense['amount'] for expense in load_expenses['expenses'])
         print(f"Total expenses: {total_amount}")
         
+    def monthly_summary(self, month):
+        load_expenses = self.load_expenses()
+        if not load_expenses:
+            return "No expenses found"
+        
+        
+        month_expenses = [expense for expense in load_expenses['expense_id']['updatedAt'] if datetime.strptime(expense['updatedAt'], "%d-%m-%Y").month == int(month)] 
+
+        total_amount = sum(expense['expense_id']['amount'] for expense in month_expenses)
+        print(f"Total expenses for {calendar.month_name[int(month)]}: ${total_amount}")
 
     def delete_expense(self, id): 
         try:
@@ -84,6 +97,7 @@ class ExpenseManager:
 
         with open(self.__file_path, "w") as file:
             json.dump(data, file)
+
     
     def load_expenses(self):
         """Load existing expenses from JSON file"""
@@ -92,7 +106,7 @@ class ExpenseManager:
                 expenses_list = json.load(file)
                 for expense_id, expense_data in expenses_list.items():
                    expense_obj = Expense.from_dict(expense_data)
-                   self._expenses[int(expense_id)] = expense_obj 
+                   self._expenses[expense_id] = expense_obj 
 
         except FileNotFoundError:
             self._expenses = []
