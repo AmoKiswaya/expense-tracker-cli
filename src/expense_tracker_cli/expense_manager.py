@@ -42,8 +42,8 @@ class ExpenseManager:
         return list(self._expenses.values())
 
 
-    def update_expense(self, expense_id:int, description:str, amount:int):
-        expense = self._expenses.get(expense_id)
+    def update_expense(self, expense_id:int, description:str, amount:float):
+        expense = self._expenses.get(expense_id) or self._expenses.get(str(expense_id))
 
         if not expense:
             raise ValueError(f"Expense with id {expense_id} does not exist")
