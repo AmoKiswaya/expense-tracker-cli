@@ -42,7 +42,7 @@ class ExpenseManager:
         return list(self._expenses.values())
 
 
-    def update_expense(self, expense_id:int, description:str, amount:float):
+    def update_expense(self, expense_id:int, description: str, amount: float):
         expense = self._expenses.get(expense_id) or self._expenses.get(str(expense_id))
 
         if not expense:
@@ -54,23 +54,24 @@ class ExpenseManager:
         return expense 
 
     def expenses_summary(self):
-        load_expenses = self.load_expenses()
-        if not load_expenses:
+        if not self._expenses:
             return "No expenses found."
         
-        total_amount = sum(expense['amount'] for expense in load_expenses['expenses'])
-        print(f"Total expenses: {total_amount}")
+        total_amount = sum(expense.amount for expense in self._expenses.values())
+        print(f"Total expenses: {total_amount:.2f}")
         
-    def monthly_summary(self, month):
-        load_expenses = self.load_expenses()
-        if not load_expenses:
+    def monthly_summary(self, month: int):
+        if not self._expenses:
             return "No expenses found"
         
         
-        month_expenses = [expense for expense in load_expenses['expense_id']['updatedAt'] if datetime.strptime(expense['updatedAt'], "%d-%m-%Y").month == int(month)] 
+        month_expenses = [
+            expense for expense in self._expenses.values()
+            if datetime.strptime(expense.updatedAt, "%d-%m-%YT%H:%M:%S").month == int(month)
+        ]
 
-        total_amount = sum(expense['expense_id']['amount'] for expense in month_expenses)
-        print(f"Total expenses for {calendar.month_name[int(month)]}: ${total_amount}")
+        total_amount = sum(expense.amount for expense in month_expenses)
+        print(f"Total expenses for {calendar.month_name[int(month)]}: ${total_amount:.2f}")
 
     def delete_expense(self, id): 
         try:
