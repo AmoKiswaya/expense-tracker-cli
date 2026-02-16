@@ -17,7 +17,7 @@ class ExpenseManager:
 
         if not self._expenses:
             return 1
-        return max(self._expenses.keys()) + 1 
+        return max(int(k) for k in self._expenses.keys()) + 1  
     
     def add_expense(self, amount, description):
         try:
@@ -36,11 +36,10 @@ class ExpenseManager:
         return expense
 
     def list_expenses(self):
-        load_expenses = self.load_expenses()
-        if not load_expenses():
-            return "Empty file: No expenses found to list."
+        if not self._expenses:
+            return []
         expenses = self._expenses.values()
-        return list(expenses)
+        return list(self._expenses.values())
 
 
     def update_expense(self, expense_id:int, description:str, amount:int):
