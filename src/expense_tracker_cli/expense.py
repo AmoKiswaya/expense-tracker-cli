@@ -24,7 +24,7 @@ class Expense:
             description=data.get("description"),
             amount=data.get("amount"),
             created_at = data.get("createdAt"), 
-            updated_At = data.get("updatedAt") 
+            updated_at = data.get("updatedAt") 
         )
 
     def to_dict(self):
