@@ -80,11 +80,14 @@ class ExpenseManager:
         except ValueError:
             return "Invalid input. Please enter an integer"
         
-        if id not in self._expenses:
+        key = expense_id if expense_id in self._expenses else str(expense_id)
+
+        
+        if key not in self._expenses:
             raise ValueError(f"Expense with id {expense_id} not found")
 
-        expense = self._expenses[expense_id]
-        del self._expenses[expense_id]
+        expense = self._expenses[key]
+        del self._expenses[key]
         self.save_expenses()
         return expense
         
@@ -96,7 +99,7 @@ class ExpenseManager:
             data[expense_id] = expense.to_dict()
 
         with open(self.__file_path, "w") as file:
-            json.dump(data, file)
+            json.dump(data, file, indent=2)
 
     
     def load_expenses(self):
@@ -106,9 +109,9 @@ class ExpenseManager:
                 expenses_list = json.load(file)
                 for expense_id, expense_data in expenses_list.items():
                    expense_obj = Expense.from_dict(expense_data)
-                   self._expenses[expense_id] = expense_obj 
+                   self._expenses[int(expense_id)] = expense_obj 
 
         except FileNotFoundError:
-            self._expenses = []
+            self._expenses = {}
         except json.JSONDecodeError:
-            self._expenses = []
+            self._expenses = {}
