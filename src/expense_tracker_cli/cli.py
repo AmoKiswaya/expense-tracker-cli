@@ -52,7 +52,7 @@ def main():
         
     elif args.command == "delete":
         try:
-            expense = manager.delete_expense(id=args.id)
+            manager.delete_expense(id=args.id)
 
         except ValueError as e:
             print(e)
