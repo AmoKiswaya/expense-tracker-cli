@@ -14,6 +14,11 @@ def main():
     add_parser.add_argument("--amount", help="Expense amount", required=True) 
 
     subparsers.add_parser("list", help="List all expenses") 
+    
+    summary_parser = subparsers.add_parser("summary", help="Show total expense summary")
+    summary_parser.add_argument("--month", type=int, choices=range(1, 13),
+                                metavar="MONTH", help="Month number (1-12) for monthly summary")
+
 
     update_expenses = subparsers.add_parser("update", help="Update Expense")
     update_expenses.add_argument("--id", type=int, help="Expense's id", required=True)
@@ -67,6 +72,12 @@ def main():
 
         except ValueError as e:
             print(e)
+
+    elif args.command == "summary":
+        if args.month:
+            manager.monthly_summary(args.month)
+        else:
+            manager.expenses_summary()
 
     else:
         parser.print_help()  
